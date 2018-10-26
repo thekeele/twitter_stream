@@ -6,7 +6,6 @@ defmodule TwitterStream.Application do
 
     children = [
       worker(TwitterStream.TweetStore, []),
-      worker(TwitterStream.RealtimeTweets, [%{"track" => "bitcoin"}]),
     ]
 
     opts = [strategy: :one_for_one, name: TwitterStream.Supervisor]
