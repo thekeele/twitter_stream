@@ -1,7 +1,10 @@
 defmodule TwitterStream.RealtimeTweets do
   use GenServer
 
+  require Logger
+
   alias TwitterStream.OAuthOne, as: Auth
+  alias TwitterStream.TweetStore
 
   def start_link(params) do
     GenServer.start_link(__MODULE__, params, name: __MODULE__)
@@ -13,8 +16,7 @@ defmodule TwitterStream.RealtimeTweets do
     params = Map.to_list(params)
     opts = [
       {:async, :once}, {:stream_to, __MODULE__},
-      {:connect_timeout, 60 * 1000},
-      {:recv_timeout, 60 * 1000}
+      {:recv_timeout, :timer.minutes(3)}
     ]
 
     case :hackney.post(url, headers, {:form, params}, opts) do
@@ -27,6 +29,21 @@ defmodule TwitterStream.RealtimeTweets do
     :ok = :hackney.stream_next(ref)
 
     {:noreply, state}
+  end
+
+  def handle_info({:hackney_response, ref, {:status, code, body}}, _state) do
+    Logger.error("""
+    #{__MODULE__}
+    :status
+    code: #{code}
+    body: #{body}
+    """)
+
+    :ok = :hackney.stop_async(ref)
+
+    raise "raising to restart... #{__MODULE__}"
+
+    {:noreply, %{}}
   end
 
   def handle_info({:hackney_response, ref, {:headers, _headers}}, state) do
@@ -67,7 +84,7 @@ defmodule TwitterStream.RealtimeTweets do
   end
 
   defp put_decoded_state(tweet, state) when is_map(tweet) do
-    :ets.insert(:tweet_store, {tweet["id"], tweet})
+    :ok = TweetStore.insert(tweet)
 
     Map.delete(state, :decoder)
   end
