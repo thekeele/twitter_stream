@@ -1,4 +1,4 @@
-defmodule TwitterStream.OAuthOne do
+defmodule TwitterStream.Auth do
   # https://developer.twitter.com/en/docs/basics/authentication/guides/authorizing-a-request
 
   def oauth_header(method, url, params \\ %{})
