@@ -9,7 +9,7 @@ defmodule TwitterStream.MixProject do
       version: @version,
       elixir: "~> 1.7",
       package: package(),
-      description: "Just a fault-tolerant Twitter Streaming Elixir Application.",
+      description: "Just a fault-tolerant Elixir Twitter Streaming Library.",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       docs: [
