@@ -1,6 +1,6 @@
 # TwitterStream
 
-Just a fault-tolerant Twitter Streaming Elixir Application.
+Just a fault-tolerant Elixir Twitter Streaming Library.
 
 ```
 %{

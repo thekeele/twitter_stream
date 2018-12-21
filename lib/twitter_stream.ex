@@ -12,7 +12,7 @@ defmodule TwitterStream do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  def init(%{params: params, sink: sink}) do
+  def init(%{params: params, source: source}) do
     url = @stream_url
     headers = ["Authorization": Auth.oauth_header(:post, url, params)]
     params = Map.to_list(params)
@@ -22,7 +22,7 @@ defmodule TwitterStream do
     ]
 
     case :hackney.post(url, headers, {:form, params}, opts) do
-      {:ok, _ref} -> {:ok, %{sink: sink}}
+      {:ok, _ref} -> {:ok, %{source: source}}
       error -> {:stop, error}
     end
   end
@@ -63,7 +63,7 @@ defmodule TwitterStream do
           Map.put(state, :decoder, decoder)
 
         %{"id" => _} = tweet ->
-          :ok = Process.send(state.sink, {:ok, tweet}, [:noconnect])
+          send(state.source, {:tweet, tweet})
           Map.delete(state, :decoder)
 
         :bad_chunk ->
