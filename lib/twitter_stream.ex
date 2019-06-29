@@ -35,17 +35,8 @@ defmodule TwitterStream do
     {:noreply, state}
   end
 
-  def handle_info({:hackney_response, ref, {:status, code, body}}, _state) do
-    Logger.error("""
-    #{__MODULE__}
-    :status
-    code: #{code}
-    body: #{body}
-    """)
-
-    :ok = :hackney.stop_async(ref)
-
-    raise "raising to restart... #{__MODULE__}"
+  def handle_info({:hackney_response, ref, {:status, 420, _}}, _state) do
+    :hackney.close(ref)
 
     {:noreply, %{}}
   end
@@ -58,16 +49,16 @@ defmodule TwitterStream do
 
   def handle_info({:hackney_response, ref, chunk}, state) when is_binary(chunk) do
     state =
-      case Decoder.decode_chunk(chunk, state) do
-        {:incomplete, decoder} ->
-          Map.put(state, :decoder, decoder)
-
-        %{"id" => _} = tweet ->
-          send(state.source, {:tweet, tweet})
-          Map.delete(state, :decoder)
-
-        :bad_chunk ->
-          state
+      if Decoder.json?(chunk) do
+        case Decoder.decode(chunk, state) do
+          {:incomplete, decoder} ->
+            Map.put(state, :decoder, decoder)
+          %{"id" => _} = tweet ->
+            send(state.source, {:tweet, tweet})
+            Map.delete(state, :decoder)
+        end
+      else
+        Map.delete(state, :decoder)
       end
 
     :ok = :hackney.stream_next(ref)
