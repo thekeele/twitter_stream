@@ -1,18 +1,23 @@
 defmodule TwitterStream.Decoder do
+  @moduledoc false
 
-  def decode_chunk(chunk, %{decoder: decoder}) do
+  def json?(chunk) do
     try do
-      decoder.(:end_stream)
-    rescue
-      _error in ArgumentError -> decoder.(chunk)
+      :jsx.is_json(chunk)
+    catch
+      :initialdecimal -> false
     end
   end
 
-  def decode_chunk(chunk, _) do
+  def decode(chunk, %{decoder: decoder}) do
     try do
-      :jsx.decode(chunk, [:stream, :return_maps])
-    rescue
-      _error in ArgumentError -> :bad_chunk
+      decoder.(:end_stream)
+    catch
+      :error, :badarg -> decoder.(chunk)
     end
+  end
+
+  def decode(chunk, _) do
+    :jsx.decode(chunk, [:stream, :return_maps])
   end
 end
