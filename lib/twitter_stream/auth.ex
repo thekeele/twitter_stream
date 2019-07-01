@@ -1,10 +1,8 @@
 defmodule TwitterStream.Auth do
-  # https://developer.twitter.com/en/docs/basics/authentication/guides/authorizing-a-request
-
-  def oauth_header(method, url, params \\ %{})
-
-  def oauth_header(method, url, params) when is_atom(method),
-    do: oauth_header(Atom.to_string(method), url, params)
+  @moduledoc """
+  OAuth 1.0 implementation for Twitter API
+  https://developer.twitter.com/en/docs/basics/authentication/guides/authorizing-a-request
+  """
 
   def oauth_header(method, url, params) when is_binary(method) do
     method = String.upcase(method)
