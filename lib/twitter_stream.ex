@@ -1,33 +1,26 @@
 defmodule TwitterStream do
   use GenServer
 
-  require Logger
-
-  alias TwitterStream.Auth
-  alias TwitterStream.Decoder
-
-  @stream_url "https://stream.twitter.com/1.1/statuses/filter.json"
+  alias TwitterStream.{Auth, Decoder}
 
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+    GenServer.start_link(__MODULE__, opts, name: opts[:name] || __MODULE__)
   end
 
-  def init(%{params: params, source: source}) do
-    url = @stream_url
-    headers = ["Authorization": Auth.oauth_header(:post, url, params)]
-    params = Map.to_list(params)
-    opts = [
-      {:async, :once}, {:stream_to, __MODULE__},
+  def init(opts) do
+    url = "https://stream.twitter.com/1.1/statuses/filter.json"
+    headers = ["Authorization": Auth.oauth_header("post", url, opts[:params])]
+    params = Map.to_list(opts[:params])
+    stream_opts = [
+      {:async, :once}, {:stream_to, self()},
       {:recv_timeout, :timer.minutes(3)}
     ]
 
-    case :hackney.post(url, headers, {:form, params}, opts) do
-      {:ok, _ref} -> {:ok, %{source: source}}
+    case :hackney.post(url, headers, {:form, params}, stream_opts) do
+      {:ok, _ref} -> {:ok, %{sink: opts[:sink]}}
       error -> {:stop, error}
     end
   end
-
-  def init(_), do: {:stop, "options missing"}
 
   def handle_info({:hackney_response, ref, {:status, 200, "OK"}}, state) do
     :ok = :hackney.stream_next(ref)
@@ -35,17 +28,8 @@ defmodule TwitterStream do
     {:noreply, state}
   end
 
-  def handle_info({:hackney_response, ref, {:status, code, body}}, _state) do
-    Logger.error("""
-    #{__MODULE__}
-    :status
-    code: #{code}
-    body: #{body}
-    """)
-
-    :ok = :hackney.stop_async(ref)
-
-    raise "raising to restart... #{__MODULE__}"
+  def handle_info({:hackney_response, ref, {:status, 420, _}}, _state) do
+    :hackney.close(ref)
 
     {:noreply, %{}}
   end
@@ -58,16 +42,13 @@ defmodule TwitterStream do
 
   def handle_info({:hackney_response, ref, chunk}, state) when is_binary(chunk) do
     state =
-      case Decoder.decode_chunk(chunk, state) do
-        {:incomplete, decoder} ->
-          Map.put(state, :decoder, decoder)
-
-        %{"id" => _} = tweet ->
-          send(state.source, {:tweet, tweet})
-          Map.delete(state, :decoder)
-
-        :bad_chunk ->
-          state
+      with true <- Decoder.json?(chunk),
+           %{"id" => _} = tweet <- Decoder.decode(chunk, state) do
+        send(state.sink, {:tweet, tweet})
+        Map.delete(state, :decoder)
+      else
+        false -> Map.delete(state, :decoder)
+        {:incomplete, decoder} -> Map.put(state, :decoder, decoder)
       end
 
     :ok = :hackney.stream_next(ref)
