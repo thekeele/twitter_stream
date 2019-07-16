@@ -3,19 +3,21 @@ defmodule TwitterStream do
 
   alias TwitterStream.{Auth, Decoder}
 
-  def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, opts, name: opts[:name] || __MODULE__)
+  end
 
-  def init(%{params: params, sink: sink}) do
+  def init(opts) do
     url = "https://stream.twitter.com/1.1/statuses/filter.json"
-    headers = ["Authorization": Auth.oauth_header("post", url, params)]
-    params = Map.to_list(params)
-    opts = [
-      {:async, :once}, {:stream_to, __MODULE__},
+    headers = ["Authorization": Auth.oauth_header("post", url, opts[:params])]
+    params = Map.to_list(opts[:params])
+    stream_opts = [
+      {:async, :once}, {:stream_to, self()},
       {:recv_timeout, :timer.minutes(3)}
     ]
 
-    case :hackney.post(url, headers, {:form, params}, opts) do
-      {:ok, _ref} -> {:ok, %{sink: sink}}
+    case :hackney.post(url, headers, {:form, params}, stream_opts) do
+      {:ok, _ref} -> {:ok, %{sink: opts[:sink]}}
       error -> {:stop, error}
     end
   end
