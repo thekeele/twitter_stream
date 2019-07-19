@@ -28,6 +28,7 @@ defmodule TwitterStream.MixProject do
     [
       {:hackney, "~> 1.14.3"},
       {:jsx, "~> 2.9"},
+      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false}
     ]
   end
 
