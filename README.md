@@ -1,11 +1,11 @@
 ### Twitter Stream
 
-> ### Just a fault-tolerant Twitter streaming library.
-> Add a twitter stream process to your tree and watch the tweets surge in.
+> #### Just a fault-tolerant Twitter streaming library.
+> Add a twitter stream process to your supervision tree and watch the tweets surge in.
 
 <img src="https://thumbs.gfycat.com/CarefulOrderlyKarakul-max-1mb.gif" width="640" height="480" />
 
-## Why use Twitter Stream?
+### Why use Twitter Stream?
 
 If you're looking for an unassuming twitter stream process to add to your supervision tree then `:twitter_stream` might be the one. Twitter Stream is a GenServer that establishes an HTTP connection to the Twitter API, receives and decodes chunks, then sends a tweet message to the process of your choice. This architecture allows for multiple fault-tolerant streams that send tweets to one or more processes.
 
