@@ -8,6 +8,7 @@ defmodule TwitterStream do
   end
 
   def init(opts) do
+    http = Application.get_env(:twitter_stream, :http)
     url = "https://stream.twitter.com/1.1/statuses/filter.json"
     headers = ["Authorization": Auth.oauth_header("post", url, opts[:params])]
     params = Map.to_list(opts[:params])
@@ -16,14 +17,14 @@ defmodule TwitterStream do
       {:recv_timeout, :timer.minutes(3)}
     ]
 
-    case :hackney.post(url, headers, {:form, params}, stream_opts) do
+    case http.post(url, headers, {:form, params}, stream_opts) do
       {:ok, _ref} -> {:ok, %{sink: opts[:sink]}}
       error -> {:stop, error}
     end
   end
 
   def handle_info({:hackney_response, ref, {:status, 200, "OK"}}, state) do
-    :ok = :hackney.stream_next(ref)
+    :hackney.stream_next(ref)
 
     {:noreply, state}
   end
@@ -31,11 +32,11 @@ defmodule TwitterStream do
   def handle_info({:hackney_response, ref, {:status, 420, _}}, _state) do
     :hackney.close(ref)
 
-    {:noreply, %{}}
+    {:stop, :normal, %{}}
   end
 
   def handle_info({:hackney_response, ref, {:headers, _headers}}, state) do
-    :ok = :hackney.stream_next(ref)
+    :hackney.stream_next(ref)
 
     {:noreply, state}
   end
@@ -51,7 +52,7 @@ defmodule TwitterStream do
         {:incomplete, decoder} -> Map.put(state, :decoder, decoder)
       end
 
-    :ok = :hackney.stream_next(ref)
+    :hackney.stream_next(ref)
 
     {:noreply, state}
   end
