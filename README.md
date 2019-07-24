@@ -36,11 +36,6 @@ TWITTER_CONSUMER_SECRET="consumer_secret"
 
 `TwitterStream.start_link/1` expects a keyword list of options:
 
-GenServer registration name, optional and defaults to TwitterStream
-```elixir
-  name: DeveloperTwitterStream
-```
-
 Parameters to send to the [Twitter Streaming API](https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter)
 ```elixir
   params: %{"track" => "developer"}
@@ -51,9 +46,14 @@ Process to send all decoded tweets
   sink: self()
 ```
 
+GenServer registration name, optional and defaults to TwitterStream
+```elixir
+  name: DeveloperTwitterStream
+```
+
 Try to collect some tweets in IEx, run `$ iex -S mix`
 ```elixir
-  👉 opts = [name: DeveloperTwitterStream, params: %{"track" => "developer"}, sink: self()]
+  👉 opts = [params: %{"track" => "developer"}, sink: self(), name: DeveloperTwitterStream, ]
   👉 {:ok, pid} = TwitterStream.start_link(opts)
   👉 flush()
   {:tweet,
@@ -64,6 +64,8 @@ Try to collect some tweets in IEx, run `$ iex -S mix`
   }
 ```
 > Note: Depending on what the track value is, it may take a while to get a tweet or there could be many tweets per second
+
+<hr />
 
 `TwitterStream` can also be added to your application's supervision tree. Try the following to add `TwitterStream` to your [Phoenix](https://phoenixframework.org) app.
 
@@ -111,9 +113,9 @@ defmodule PhxTwitterStream.DeveloperTwitterStream do
 end
 ```
 
-To display incoming tweets, we can use [Phoenix Channels](https://hexdocs.pm/phoenix/channels.html)
+To display the incoming tweets, we can use [Phoenix Channels](https://hexdocs.pm/phoenix/channels.html)
 
-Add a new channel for tweets, `tweet_channel.ex`
+Add a new channel for broadcasting tweets, `tweet_channel.ex`
 ```elixir
 defmodule PhxTwitterStreamWeb.TweetChannel do
   use Phoenix.Channel
