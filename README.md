@@ -136,7 +136,7 @@ channel "room:tweets", PhxTwitterStreamWeb.TweetChannel
 ```
 
 Connect to the channel and handle the `new_tweet` event in `socket.js`
-```elixir
+```javascript
 let channel = socket.channel("room:tweets", {})
 
 channel.on("new_tweet", tweet => {
@@ -149,10 +149,10 @@ channel.on("new_tweet", tweet => {
 })
 ```
 
-Navigate to `localhost:4000` and watch the tweets come in
+Navigate to `http://localhost:4000` and watch the tweets come in
 
 ![alt text](https://i.imgur.com/SVptwv7.png)
 
 ## License
 
-MIT. See the [`LICENSE.md`](https://github.com/thekeele/twitter_stream/blob/master/LICENSE.md) in this repository for more details.
+MIT. See the [`LICENSE`](https://github.com/thekeele/twitter_stream/blob/master/LICENSE) in this repository for more details.
