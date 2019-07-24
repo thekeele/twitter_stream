@@ -1,6 +1,6 @@
 # Twitter Stream
 
-[![Master](https://travis-ci.org/thekeele/twitter_stream.svg?branch=master)](https://travis-ci.com/thekeele/twitter_stream)
+[![Build Status](https://travis-ci.com/thekeele/twitter_stream.svg?branch=develop)](https://travis-ci.com/thekeele/twitter_stream)
 
 > #### Just a fault-tolerant Twitter streaming library.
 > Add a twitter stream process to your supervision tree and watch the tweets surge in.
