@@ -12,6 +12,13 @@ defmodule TwitterStream.MixProject do
       description: description(),
       package: package(),
       deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.html": :test,
+        "coveralls.json": :test,
+      ],
       docs: [
         main: "TwitterStream",
         source_ref: "v#{@version}",
@@ -28,7 +35,8 @@ defmodule TwitterStream.MixProject do
     [
       {:hackney, "~> 1.14.3"},
       {:jsx, "~> 2.9"},
-      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false}
+      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 

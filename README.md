@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.com/thekeele/twitter_stream.svg?branch=develop)](https://travis-ci.com/thekeele/twitter_stream)
 
+[![Coverage Status](https://coveralls.io/repos/github/thekeele/twitter_stream/badge.svg?branch=develop)](https://coveralls.io/github/thekeele/twitter_stream?branch=develop)
+
 > #### Just a fault-tolerant Twitter streaming library.
 > Add a twitter stream process to your supervision tree and watch the tweets surge in.
 
@@ -53,7 +55,7 @@ GenServer registration name, optional and defaults to TwitterStream
 
 Try to collect some tweets in IEx, run `$ iex -S mix`
 ```elixir
-  👉 opts = [params: %{"track" => "developer"}, sink: self(), name: DeveloperTwitterStream, ]
+  👉 opts = [params: %{"track" => "developer"}, sink: self(), name: DeveloperTwitterStream]
   👉 {:ok, pid} = TwitterStream.start_link(opts)
   👉 flush()
   {:tweet,

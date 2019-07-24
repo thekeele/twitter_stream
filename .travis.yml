@@ -8,7 +8,7 @@ otp_release:
 install:
   - MIX_ENV=test mix do local.rebar --force, local.hex --force, deps.get
 script:
-  - MIX_ENV=test mix do compile, test
+  - MIX_ENV=test mix do compile, test, coveralls.travis
 notifications:
   email:
     - mark@keele.codes
