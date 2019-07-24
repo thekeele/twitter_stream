@@ -1,3 +1,4 @@
+service_name: travis-ci
 dist: trusty
 sudo: false
 language: elixir
@@ -8,7 +9,9 @@ otp_release:
 install:
   - MIX_ENV=test mix do local.rebar --force, local.hex --force, deps.get
 script:
-  - MIX_ENV=test mix do compile, test, coveralls.travis
+  - MIX_ENV=test mix do compile, test
+after_script:
+  - MIX_ENV=test mix coveralls.travis
 notifications:
   email:
     - mark@keele.codes
