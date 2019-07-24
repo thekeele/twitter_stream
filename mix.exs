@@ -35,6 +35,7 @@ defmodule TwitterStream.MixProject do
     [
       {:hackney, "~> 1.14.3"},
       {:jsx, "~> 2.9"},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test}
     ]

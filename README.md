@@ -53,9 +53,9 @@ GenServer registration name, optional and defaults to TwitterStream
 
 Try to collect some tweets in IEx, run `$ iex -S mix`
 ```elixir
-  👉 opts = [params: %{"track" => "developer"}, sink: self(), name: DeveloperTwitterStream]
-  👉 {:ok, pid} = TwitterStream.start_link(opts)
-  👉 flush()
+  iex> opts = [params: %{"track" => "developer"}, sink: self(), name: DeveloperTwitterStream]
+  iex> {:ok, pid} = TwitterStream.start_link(opts)
+  iex> flush()
   {:tweet,
     %{
       "text" => "...",

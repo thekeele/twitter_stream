@@ -1,12 +1,52 @@
 defmodule TwitterStream do
+  @moduledoc """
+  TwitterStream is a GenServer that can be invoked manually via `start_link/1` or
+  added as a `child_spec/1` to a supervision tree.
+  """
   use GenServer
 
   alias TwitterStream.{Auth, Decoder}
 
+  @doc """
+  Start a twitter stream process given [Twitter Streaming API](https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter) parameters and a process to sink tweets to.
+
+  Returns `{:ok, pid}`.
+
+  ## The available keyword list of options are:
+
+  Parameters to send to the [Twitter Streaming API](https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter).
+  ```elixir
+  params: %{"track" => "developer", "language" => "en", "filter_level" => "low"}
+  ```
+
+  Process to send all decoded tweets to.
+  ```elixir
+  sink: self()
+  ```
+
+  GenServer registration name, optional and defaults to `TwitterStream`.
+  ```elixir
+  name: DeveloperTwitterStream
+  ```
+
+  ## Examples
+
+      iex> opts = [params: %{"track" => "developer"}, sink: self()]
+      iex> {:ok, pid} = TwitterStream.start_link(opts)
+      iex> flush()
+      {:tweet,
+        %{
+          "text" => "...",
+          ...
+        }
+      }
+
+  """
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: opts[:name] || __MODULE__)
   end
 
+  @doc false
   def init(opts) do
     http = Application.get_env(:twitter_stream, :http) || :hackney
     url = "https://stream.twitter.com/1.1/statuses/filter.json"
