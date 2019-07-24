@@ -1,0 +1,12 @@
+dist: trusty
+sudo: required
+language: elixir
+elixir:
+  - '1.7'
+otp_release:
+  - '21'
+script:
+  - MIX_ENV=test mix do compile, test
+notifications:
+  email:
+    - mark@keele.codes
