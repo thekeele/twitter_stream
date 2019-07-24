@@ -8,7 +8,7 @@ defmodule TwitterStream do
   end
 
   def init(opts) do
-    http = Application.get_env(:twitter_stream, :http)
+    http = Application.get_env(:twitter_stream, :http) || :hackney
     url = "https://stream.twitter.com/1.1/statuses/filter.json"
     headers = ["Authorization": Auth.oauth_header("post", url, opts[:params])]
     params = Map.to_list(opts[:params])
