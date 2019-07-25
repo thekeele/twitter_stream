@@ -1,9 +1,10 @@
 defmodule TwitterStream.Auth do
-  @moduledoc """
+  @moduledoc false
+
+  @doc """
   OAuth 1.0 implementation for Twitter API
   https://developer.twitter.com/en/docs/basics/authentication/guides/authorizing-a-request
   """
-
   def oauth_header(method, url, params) when is_binary(method) do
     method = String.upcase(method)
     nonce = nonce()
