@@ -1,6 +1,6 @@
 # Twitter Stream
 
-[![Build Status](https://travis-ci.com/thekeele/twitter_stream.svg?branch=develop)](https://travis-ci.com/thekeele/twitter_stream) [![Coverage Status](https://coveralls.io/repos/github/thekeele/twitter_stream/badge.svg?branch=develop)](https://coveralls.io/github/thekeele/twitter_stream?branch=develop)
+[![Build Status](https://travis-ci.com/thekeele/twitter_stream.svg?branch=master)](https://travis-ci.com/thekeele/twitter_stream) [![Coverage Status](https://coveralls.io/repos/github/thekeele/twitter_stream/badge.svg?branch=master)](https://coveralls.io/github/thekeele/twitter_stream?branch=master)
 
 > #### Just a fault-tolerant Twitter streaming library.
 > Add a twitter stream process to your supervision tree and watch the tweets surge in.
