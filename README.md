@@ -1,6 +1,6 @@
 # Twitter Stream
 
-[![Build Status](https://travis-ci.com/thekeele/twitter_stream.svg?branch=master)](https://travis-ci.com/thekeele/twitter_stream) [![Coverage Status](https://coveralls.io/repos/github/thekeele/twitter_stream/badge.svg?branch=master)](https://coveralls.io/github/thekeele/twitter_stream?branch=master)[![Hex.pm](https://img.shields.io/hexpm/v/twitter_stream.svg)](https://hex.pm/packages/twitter_stream)[![Documentation Status](https://img.shields.io/badge/docs-hexdocs-blue.svg)](http://hexdocs.pm/twitter_stream)
+[![Build Status](https://travis-ci.com/thekeele/twitter_stream.svg?branch=master)](https://travis-ci.com/thekeele/twitter_stream) [![Coverage Status](https://coveralls.io/repos/github/thekeele/twitter_stream/badge.svg?branch=master)](https://coveralls.io/github/thekeele/twitter_stream?branch=master) [![Hex.pm](https://img.shields.io/hexpm/v/twitter_stream.svg)](https://hex.pm/packages/twitter_stream) [![Documentation Status](https://img.shields.io/badge/docs-hexdocs-blue.svg)](http://hexdocs.pm/twitter_stream)
 
 > #### Just a fault-tolerant Twitter streaming library.
 > Add a twitter stream process to your supervision tree and watch the tweets surge in.
