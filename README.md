@@ -1,6 +1,6 @@
 # Twitter Stream
 
-[![Build Status](https://travis-ci.com/thekeele/twitter_stream.svg?branch=master)](https://travis-ci.com/thekeele/twitter_stream) [![Coverage Status](https://coveralls.io/repos/github/thekeele/twitter_stream/badge.svg?branch=master)](https://coveralls.io/github/thekeele/twitter_stream?branch=master)
+[![Build Status](https://travis-ci.com/thekeele/twitter_stream.svg?branch=master)](https://travis-ci.com/thekeele/twitter_stream) [![Coverage Status](https://coveralls.io/repos/github/thekeele/twitter_stream/badge.svg?branch=master)](https://coveralls.io/github/thekeele/twitter_stream?branch=master)[![Hex.pm](https://img.shields.io/hexpm/v/twitter_stream.svg)](https://hex.pm/packages/twitter_stream)[![Documentation Status](https://img.shields.io/badge/docs-hexdocs-blue.svg)](http://hexdocs.pm/twitter_stream)
 
 > #### Just a fault-tolerant Twitter streaming library.
 > Add a twitter stream process to your supervision tree and watch the tweets surge in.
@@ -10,6 +10,10 @@
 ## Why use Twitter Stream?
 
 If you're looking for an unassuming twitter stream process to add to your supervision tree then `:twitter_stream` might be the one. Twitter Stream is a GenServer that establishes an HTTP connection to the Twitter API, receives and decodes chunks, then sends a tweet message to the process of your choice. This architecture allows for multiple fault-tolerant streams that send tweets to one or more processes.
+
+## Documentation
+
+Online documentation is available at [https://hexdocs.pm/twitter_stream](https://hexdocs.pm/twitter_stream)
 
 ## Getting started
 
@@ -32,7 +36,7 @@ TWITTER_CONSUMER_SECRET="consumer_secret"
 
 ## Usage
 
-`TwitterStream` is a [GenServer](https://hexdocs.pm/elixir/GenServer.html) and thus can be used as you would use a [GenServer](https://hexdocs.pm/elixir/GenServer.html).
+`TwitterStream` is a [GenServer](https://hexdocs.pm/elixir/GenServer.html) and thus can be used in the same manner.
 
 `TwitterStream.start_link/1` expects a keyword list of options:
 
