@@ -85,7 +85,7 @@ defmodule TwitterStream do
     state =
       with true <- Decoder.json?(chunk),
            %{"id" => _} = tweet <- Decoder.decode(chunk, state) do
-        send(state.sink, {:tweet, tweet})
+        send(state.sink, {:tweet, self(), tweet})
         Map.delete(state, :decoder)
       else
         false -> Map.delete(state, :decoder)
