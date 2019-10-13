@@ -24,7 +24,8 @@ defmodule TwitterStreamTest do
     send(TwitterStreamTest, {:hackney_response, make_ref(), "{\"id\":1337}"})
     send(TwitterStreamTest, {:hackney_response, make_ref(), "{}"})
 
-    assert_receive {:tweet, tweet}
+    assert_receive {:tweet, from, tweet}
+    assert is_pid(from)
     assert Map.has_key?(tweet, "id")
   end
 

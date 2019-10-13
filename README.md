@@ -109,7 +109,7 @@ defmodule PhxTwitterStream.DeveloperTwitterStream do
     {:ok, opts}
   end
 
-  def handle_info({:tweet, tweet}, opts) do
+  def handle_info({:tweet, from, tweet}, opts) do
     PhxTwitterStreamWeb.TweetChannel.broadcast_tweet(tweet)
 
     {:noreply, opts}
