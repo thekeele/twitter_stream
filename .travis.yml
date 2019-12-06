@@ -3,9 +3,9 @@ dist: trusty
 sudo: false
 language: elixir
 elixir:
-  - '1.7'
+  - '1.9'
 otp_release:
-  - '21.0'
+  - '22.1'
 install:
   - MIX_ENV=test mix do local.rebar --force, local.hex --force, deps.get
 script:
