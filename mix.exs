@@ -7,7 +7,7 @@ defmodule TwitterStream.MixProject do
     [
       app: :twitter_stream,
       version: @version,
-      elixir: "~> 1.7",
+      elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
@@ -33,7 +33,7 @@ defmodule TwitterStream.MixProject do
 
   defp deps() do
     [
-      {:hackney, "~> 1.14.3"},
+      {:hackney, "~> 1.15.2"},
       {:jsx, "~> 2.9"},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
