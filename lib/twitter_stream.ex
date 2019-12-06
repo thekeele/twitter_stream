@@ -83,13 +83,14 @@ defmodule TwitterStream do
 
   def handle_info({:hackney_response, ref, chunk}, state) when is_binary(chunk) do
     state =
-      with true <- Decoder.json?(chunk),
+      with {:json, true} <- {:json, Decoder.json?(chunk)},
            %{"id" => _} = tweet <- Decoder.decode(chunk, state) do
         send(state.sink, {:tweet, self(), tweet})
         Map.delete(state, :decoder)
       else
-        false -> Map.delete(state, :decoder)
+        {:json, false} -> Map.delete(state, :decoder)
         {:incomplete, decoder} -> Map.put(state, :decoder, decoder)
+        %{"limit" => _} -> Map.delete(state, :decoder)
       end
 
     :hackney.stream_next(ref)
